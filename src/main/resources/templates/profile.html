@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <title>यूज़र प्रोफाइल</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background-color: #f0f2f5;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 500px;
+        background: #ffffff;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        text-align: center;
+        color: #333333;
+        margin-bottom: 1.5rem;
+        font-size: 1.8rem;
+    }
+
+    label {
+        display: block;
+        margin-top: 1rem;
+        font-weight: 600;
+        color: #333;
+    }
+
+    input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        margin-top: 0.3rem;
+        font-size: 1rem;
+    }
+
+    input:focus {
+        border-color: #d30000;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(211, 0, 0, 0.2);
+    }
+
+    button {
+        margin-top: 2rem;
+        width: 100%;
+        padding: 0.9rem;
+        background-color: #d30000;
+        color: white;
+        border: none;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #a00000;
+    }
+
+    .success-msg,
+    .error-msg {
+        margin-bottom: 1rem;
+        padding: 1rem;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+
+    .success-msg {
+        background-color: #e6ffed;
+        color: #107c41;
+        border-left: 5px solid #23b55f;
+    }
+
+    .error-msg {
+        background-color: #ffe6e6;
+        color: #d10000;
+        border-left: 5px solid #f33;
+    }
+
+    @media (max-width: 600px) {
+        .container {
+            padding: 1.5rem;
+            margin: 1rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+        }
+
+        input,
+        button {
+            font-size: 1rem;
+        }
+    }
+</style>
+
+</head>
+<body>
+
+     <div th:if="${errorMsg}" class="error-msg" th:text="${errorMsg}"></div>
+
+    <div th:if="${successMsg}" class="success-msg">  <p th:text="${successMsg}"></p></div>
+
+    <div style="position: absolute; top: 20px; left: 20px;">
+    <a href="/top-news/topnews/india" style="
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background-color: #d30000;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+    " onmouseover="this.style.backgroundColor='#a00000'" onmouseout="this.style.backgroundColor='#d30000'">
+        📰 Top News
+    </a>
+</div>
+
+
+<div class="container">
+    <h2>🧑‍💼 आपकी प्रोफ़ाइल</h2>
+
+    <form th:action="@{/user/profile}" method="post" th:object="${user}">
+        <!-- Hidden field for user ID -->
+        <input type="hidden" name="id" th:value="${user.id}"/>
+
+        <label>नाम:</label>
+        <input type="text" name="name" th:value="${user.name}" required/>
+
+        <label>ईमेल:</label>
+        <input type="email" name="email" th:value="${user.email}" required/>
+
+
+        <button type="submit">प्रोफ़ाइल अपडेट करें</button>
+    </form>
+</div>
+
+</body>
+</html>

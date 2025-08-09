@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Portal - Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #e60000;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            flex: 1 1 100%;
+            text-align: center;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 0.5rem;
+            flex: 1 1 100%;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .hero {
+            background-image: url('https://images.unsplash.com/photo-1581090700227-1e8d5e3f1bfb');
+            background-size: cover;
+            background-position: center;
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-shadow: 1px 1px 5px #000;
+            text-align: center;
+            padding: 0 1rem;
+        }
+
+        .hero h2 {
+            font-size: 2rem;
+        }
+
+        .content {
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+
+        .buttons a {
+            display: inline-block;
+            background-color: #e60000;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            margin: 0.5rem;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+            font-size: 1rem;
+        }
+
+        .buttons a:hover {
+            background-color: #c70000;
+        }
+
+        /* Responsive Styles */
+        @media (min-width: 600px) {
+            header {
+                flex-wrap: nowrap;
+            }
+
+            header h1 {
+                flex: none;
+                text-align: left;
+            }
+
+            nav {
+                flex: none;
+                margin-top: 0;
+                justify-content: flex-end;
+            }
+
+            .hero h2 {
+                font-size: 2.5rem;
+            }
+
+            .buttons a {
+                font-size: 1.1rem;
+                padding: 0.75rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>India ki khabare</h1>
+        <nav>
+            <a th:href="@{/user/login}">Login</a>
+            <a th:href="@{/user/register}">Register</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h2>Welcome to India's Trusted News Portal</h2>
+    </section>
+
+    <div class="content">
+        <p>Stay informed with real-time updates, breaking news, and in-depth articles on current affairs.</p>
+        <div class="buttons">
+            <a th:href="@{/user/login}">Login</a>
+            <a th:href="@{/user/register}">Register</a>
+        </div>
+    </div>
+
+</body>
+
+</html>

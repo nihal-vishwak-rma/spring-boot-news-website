@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Register - News Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background-color: #ffb8b8;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 60px auto;
+      background: #ffe5e5;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
+    }
+
+    h2 {
+      text-align: center;
+      color: #cc0000;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"] {
+      width: 100%;
+      padding: 12px;
+      margin-top: 12px;
+      border: 1px solid #ff9999;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #cc0000;
+      box-shadow: 0 0 5px rgba(204, 0, 0, 0.3);
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #cc0000;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      margin-top: 20px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    button:hover {
+      background-color: #b30000;
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .login-link a {
+      color: #cc0000;
+      text-decoration: none;
+    }
+
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+
+    .error-msg,
+    .success-msg {
+      margin: 10px auto;
+      padding: 12px;
+      border-radius: 5px;
+      width: 90%;
+    }
+
+    .error-msg {
+      background-color: #ffdddd;
+      color: #d8000c;
+      border-left: 6px solid #f44336;
+    }
+
+    .success-msg {
+      background-color: #e0ffe0;
+      color: #107c10;
+      border-left: 6px solid #4CAF50;
+    }
+
+    .otp-container {
+      margin-top: 20px;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .resend-link {
+      display: block;
+      margin-top: 10px;
+      text-align: right;
+      font-size: 0.9rem;
+      color: #cc0000;
+      cursor: pointer;
+    }
+
+    .resend-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 600px) {
+      .container {
+        margin: 30px 15px;
+        padding: 20px;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      input,
+      button {
+        font-size: 0.95rem;
+        padding: 10px;
+      }
+
+      .resend-link {
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Error message -->
+  <div th:if="${errorMsg}" class="error-msg" th:text="${errorMsg}"></div>
+
+  <!-- Success message -->
+  <div th:if="${successMsg}" class="success-msg" th:text="${successMsg}"></div>
+
+  <div class="container">
+    <h2>Register</h2>
+
+    <!-- Registration form -->
+    <form th:action="@{/user/regForm}" method="post" th:object="${user}" id="registerForm">
+      <input type="text" th:field="*{name}" placeholder="Full Name" required />
+      <input type="email" th:field="*{email}" id="emailInput" placeholder="Email" required />
+      <input type="password" th:field="*{password}" placeholder="Password" required />
+
+      <!-- OTP -->
+      <button type="button" onclick="sendOtp()">Send OTP</button>
+
+      <div class="otp-container" id="otpSection">
+        <input type="text" id="otpInput" placeholder="Enter OTP" />
+        <button type="button" onclick="verifyOtp()">Verify OTP</button>
+        <button type="button" onclick="resendOtp()">Resend OTP</button>
+      </div>
+
+      <button type="submit">Register</button>
+    </form>
+
+    <div class="login-link">
+      <p>Already have an account? <a th:href="@{/user/login}">Login here</a></p>
+    </div>
+  </div>
+
+  <script>
+    function sendOtp() {
+      const email = document.getElementById("emailInput").value;
+
+      if (!email) {
+        alert("Please enter your email.");
+        return;
+      }
+
+      fetch('/user/otp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'email=' + encodeURIComponent(email)
+      })
+        .then(response => response.text())
+        .then(data => {
+          alert(data);
+          document.getElementById("otpSection").style.display = "flex";
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert("Error sending OTP.");
+        });
+    }
+
+    function verifyOtp() {
+      const email = document.getElementById("emailInput").value;
+      const otp = document.getElementById("otpInput").value;
+
+      if (!email || !otp) {
+        alert("Please enter both email and OTP.");
+        return;
+      }
+
+      fetch('/user/verify-otp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'email=' + encodeURIComponent(email) + '&userotp=' + encodeURIComponent(otp)
+      })
+        .then(response => response.text())
+        .then(data => {
+          alert(data);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert("OTP verification failed.");
+        });
+    }
+
+    function resendOtp() {
+      sendOtp();
+    }
+  </script>
+
+</body>
+
+</html>

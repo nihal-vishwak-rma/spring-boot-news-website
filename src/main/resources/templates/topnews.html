@@ -1,0 +1,311 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <title>भारत की टॉप न्यूज़</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: 'Mangal', Arial, sans-serif;
+        background-color: #f2f2f2;
+    }
+
+    header {
+        background-color: #d30000;
+        color: white;
+        padding: 1rem;
+        text-align: center;
+        position: relative;
+    }
+
+    header h1 {
+        font-size: 1.8rem;
+        margin: 0;
+    }
+
+    .breaking-news {
+        background-color: #ff0000;
+        color: white;
+        text-align: center;
+        padding: 0.5rem;
+        font-weight: bold;
+        font-size: 1rem;
+    }
+
+    .news-container {
+        max-width: 1200px;
+        margin: auto;
+        padding: 1rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1rem;
+    }
+
+    .news-card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        overflow: hidden;
+        transition: transform 0.2s;
+    }
+
+    .news-card:hover {
+        transform: scale(1.01);
+    }
+
+    .news-card img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+    }
+
+    .news-content {
+        padding: 1rem;
+    }
+
+    .news-content h2 {
+        font-size: 1rem;
+        color: #d30000;
+        margin: 0 0 0.5rem;
+    }
+
+    .news-content p {
+        font-size: 0.9rem;
+        color: #333;
+    }
+
+    .news-content a {
+        display: inline-block;
+        margin-top: 0.5rem;
+        color: #007bff;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .news-content a:hover {
+        text-decoration: underline;
+    }
+
+    .logout-btn,
+    .home-btn {
+        background-color: white;
+        color: #d30000;
+        border: 2px solid white;
+        padding: 8px 14px;
+        font-size: 0.85rem;
+        font-weight: bold;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s, color 0.3s;
+    }
+
+    .logout-btn:hover,
+    .home-btn:hover {
+        background-color: #d30000;
+        color: white;
+    }
+
+    .pagination-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        align-items: center;
+        margin-top: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .pagination-btn {
+        background-color: #d30000;
+        color: white;
+        padding: 0.6rem 1.2rem;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        font-size: 0.95rem;
+        transition: background 0.3s ease;
+    }
+
+    .pagination-btn:hover {
+        background-color: #a00000;
+    }
+
+    .page-number {
+        font-size: 1rem;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .home-dropdown {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: white;
+        min-width: 150px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        z-index: 2;
+        margin-top: 5px;
+        border-radius: 5px;
+    }
+
+    .dropdown-content a {
+        color: #d30000;
+        padding: 10px 14px;
+        text-decoration: none;
+        display: block;
+        font-weight: bold;
+        font-size: 0.9rem;
+    }
+
+    .dropdown-content a:hover {
+        background-color: #f2f2f2;
+    }
+
+    nav a {
+        font-size: 0.95rem;
+    }
+
+    /* ✅ MOBILE RESPONSIVENESS */
+    @media screen and (max-width: 500px) {
+        header h1 {
+            font-size: 1.3rem;
+        }
+
+        .breaking-news {
+            font-size: 0.85rem;
+            padding: 0.3rem;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        nav a {
+            font-size: 0.85rem;
+        }
+
+        .logout-btn,
+        .home-btn {
+            padding: 6px 10px;
+            font-size: 0.75rem;
+        }
+
+        .news-card img {
+            height: 150px;
+        }
+
+        .news-content h2 {
+            font-size: 0.95rem;
+        }
+
+        .news-content p {
+            font-size: 0.85rem;
+        }
+
+        .news-content a {
+            font-size: 0.85rem;
+        }
+    }
+</style>
+
+</head>
+<body>
+    <header>
+        <h1> भारत की टॉप न्यूज़</h1>
+
+        <!-- 🔽 Home Dropdown Menu -->
+        <div class="home-dropdown">
+            <button class="home-btn">☰ Home</button>
+            <div class="dropdown-content">
+                <a th:href="@{/user/profile}">👤 Your Profile</a>
+                <a th:href="@{/user/feedback}">📝 Feedback</a>
+            </div>
+        </div>
+
+        <!-- 🔐 Logout Button -->
+        <form th:action="@{/logout}" method="post" style="position: absolute; top: 10px; right: 10px; margin: 0;">
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
+    </header>
+
+    <!-- 🔴 Breaking News Section -->
+    <div class="breaking-news">
+        <span>news categories</span>
+        <nav style="margin-top: 0.5rem;">
+            <a href="/top-news/topnews/india" style="color: white; margin: 0 15px;">INDIA</a>
+            <a href="/top-news/topnews/cricket" style="color: white; margin: 0 15px;"> CRICKET</a>
+            <a href="/top-news/topnews/politics" style="color: white; margin: 0 15px;">POLITICS</a>
+            <a href="/top-news/topnews/business" style="color: white; margin: 0 15px;">BUSINESS</a>
+            <a href="/top-news/topnews/tech" style="color: white; margin: 0 15px;">TECH</a>
+            <a href="/top-news/topnews/movies" style="color: white; margin: 0 15px;">MOVIES</a>
+        </nav>
+    </div>
+
+    <!-- ❗ News not found -->
+    <div th:if="${newsNotFound}">
+        <p style="margin-left: 35px;" th:text="${newsNotFound}"></p>
+    </div>
+
+    <!-- 📰 News Cards -->
+    <div class="news-container">
+        <div class="news-card" th:each="article : ${articles}">
+            <img th:src="${article.urlToImage}" alt="news image">
+            <div class="news-content">
+                <h2 th:text="${article.title}">Title</h2>
+                <p th:text="${article.description}">News Description</p>
+                <a th:href="${article.url}" target="_blank">पूरा पढ़ें</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ⏩ Pagination -->
+    <div style="text-align: center; margin: 2rem 0;">
+        <div class="pagination-buttons">
+            <a th:href="@{'/top-news/topnews/' + ${category} + '?page=' + (${currentPage - 1}) + '&size=' + ${pageSize}}"
+               th:if="${currentPage > 1}" class="pagination-btn">⬅ पिछला</a>
+
+            <span class="page-number">पेज [[${currentPage}]]</span>
+
+            <a th:href="@{'/top-news/topnews/' + ${category} + '?page=' + (${currentPage + 1}) + '&size=' + ${pageSize}}"
+               th:if="${hasMore}" class="pagination-btn">अगला ➡</a>
+        </div>
+    </div>
+
+    <!-- ✅ Script for Dropdown Click Toggle -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const homeBtn = document.querySelector('.home-btn');
+            const dropdown = document.querySelector('.dropdown-content');
+
+            homeBtn.addEventListener('click', function (event) {
+                event.stopPropagation();
+                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+            });
+
+            document.addEventListener('click', function () {
+                dropdown.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+

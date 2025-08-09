@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login - News Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffb8b8;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+            background-color: #ffffff(160, 211, 255);
+            padding: 30px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 12px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .register-link a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .error-msg {
+            background-color: #ffdddd;
+            color: #d8000c;
+            border-left: 6px solid #f44336;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+
+        .success-msg {
+            background-color: #ffdddd;
+            color: #3afb44;
+            border-left: 6px solid #85f425;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+
+        @media (max-width: 500px) {
+            .container {
+                margin: 20px;
+                padding: 20px;
+            }
+
+            h2 {
+                font-size: 22px;
+            }
+
+            button {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Error Message -->
+
+    <div th:if="${param.error}" class="error-msg">
+        Invalid username or password!
+    </div>
+
+
+    <div th:if="${successMsg}" class="success-msg" th:text="${successMsg}"></div>
+
+    <h2>Login</h2>
+
+    <form th:action="@{/user/login}" method="post">
+        <input type="email" name="username" placeholder="Enter your email" required />
+        <input type="password" name="password" placeholder="Enter your password" required />
+        <button type="submit">Login</button>
+    </form>
+
+    <div class="register-link">
+        <p>Don't have an account? <a th:href="@{/user/register}">Register here</a></p>
+          <p><a th:href="@{/user/forgotpassword}">Forgot Password</a></p>
+    </div>
+</div>
+
+</body>
+</html>
